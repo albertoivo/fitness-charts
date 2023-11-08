@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import { ckph, cmmm, cmph, cmps, cmms, cmkm, cmks } from './calculator'
+import { ckph, cmmm, cmph, cmps, cmms, cmkm, cmks, cfiveKmHours, cfiveKmSecs, cfiveKmMins, ctenKmHours, ctenKmMins, ctenKmSecs, chalfHours, chalfMins, cMaraSecs, cMaraHours, cMaraMins, chalfSecs } from './calculator'
 
 function PaceSpeedConverter() {
   // Speeds
@@ -19,239 +19,111 @@ function PaceSpeedConverter() {
   const [fiveMins, setFiveMins] = useState('') // 5k time
   const [fiveSecs, setFiveSecs] = useState('') // 5k time
 
-  const [tenHours, setTenHours] = useState() // 10k time
-  const [tenMins, setTenMins] = useState() // 10k time
-  const [tenSecs, setTenSecs] = useState() // 10k time
+  const [tenHours, setTenHours] = useState('') // 10k time
+  const [tenMins, setTenMins] = useState('') // 10k time
+  const [tenSecs, setTenSecs] = useState('') // 10k time
 
-  const [halfHours, setHalfHours] = useState() // Half Marathon time
-  const [halfMins, setHalfMins] = useState() // Half Marathon time
-  const [halfSecs, setHalfSecs] = useState() // Half Marathon time
+  const [halfHours, setHalfHours] = useState('') // Half Marathon time
+  const [halfMins, setHalfMins] = useState('') // Half Marathon time
+  const [halfSecs, setHalfSecs] = useState('') // Half Marathon time
 
-  const [maraHours, setMaraHours] = useState() // Marathon time
-  const [maraMins, setMaraMins] = useState() // Marathon time
-  const [maraSecs, setMaraSecs] = useState() // Marathon time
+  const [maraHours, setMaraHours] = useState('') // Marathon time
+  const [maraMins, setMaraMins] = useState('') // Marathon time
+  const [maraSecs, setMaraSecs] = useState('') // Marathon time
 
   const mphOnChange = ({ currentTarget: { value } }) => {
     setMph(value)
-    cmph(
-      value,
-      setKph,
-      setMps,
-      setMmm,
-      setMms,
-      setMkm,
-      setMks,
-      setFiveHours,
-      setFiveMins,
-      setFiveSecs,
-      setTenHours,
-      setTenMins,
-      setTenSecs,
-      setHalfHours,
-      setHalfMins,
-      setHalfSecs,
-      setMaraHours,
-      setMaraMins,
-      setMaraSecs
-    )
+    cmph(value, setKph, setMps, setMmm, setMms, setMkm, setMks, setFiveHours, setFiveMins, setFiveSecs, setTenHours, setTenMins, setTenSecs, setHalfHours, setHalfMins, setHalfSecs, setMaraHours, setMaraMins, setMaraSecs)
   }
 
   const kphOnChange = ({ currentTarget: { value } }) => {
     setKph(value)
-    ckph(
-      value,
-      setMph,
-      setMps,
-      setMmm,
-      setMms,
-      setMkm,
-      setMks,
-      setFiveHours,
-      setFiveMins,
-      setFiveSecs,
-      setTenHours,
-      setTenMins,
-      setTenSecs,
-      setHalfHours,
-      setHalfMins,
-      setHalfSecs,
-      setMaraHours,
-      setMaraMins,
-      setMaraSecs
-    )
+    ckph(value, setMph, setMps, setMmm, setMms, setMkm, setMks, setFiveHours, setFiveMins, setFiveSecs, setTenHours, setTenMins, setTenSecs, setHalfHours, setHalfMins, setHalfSecs, setMaraHours, setMaraMins, setMaraSecs)
   }
 
   const mpsOnChange = ({ currentTarget: { value } }) => {
     setMps(value)
-    cmps(
-      value,
-      setKph,
-      setMph,
-      setMmm,
-      setMms,
-      setMkm,
-      setMks,
-      setFiveHours,
-      setFiveMins,
-      setFiveSecs,
-      setTenHours,
-      setTenMins,
-      setTenSecs,
-      setHalfHours,
-      setHalfMins,
-      setHalfSecs,
-      setMaraHours,
-      setMaraMins,
-      setMaraSecs
-    )
+    cmps(value, setKph, setMph, setMmm, setMms, setMkm, setMks, setFiveHours, setFiveMins, setFiveSecs, setTenHours, setTenMins, setTenSecs, setHalfHours, setHalfMins, setHalfSecs, setMaraHours, setMaraMins, setMaraSecs)
   }
 
   const mmmOnChange = ({ currentTarget: { value } }) => {
     setMmm(value)
-    cmmm(
-      value,
-      mms,
-      setMph,
-      setKph,
-      setMps,
-      setMkm,
-      setMks,
-      setFiveHours,
-      setFiveMins,
-      setFiveSecs,
-      setTenHours,
-      setTenMins,
-      setTenSecs,
-      setHalfHours,
-      setHalfMins,
-      setHalfSecs,
-      setMaraHours,
-      setMaraMins,
-      setMaraSecs
-    )
+    cmmm(value, mms, setMph, setKph, setMps, setMkm, setMks, setFiveHours, setFiveMins, setFiveSecs, setTenHours, setTenMins, setTenSecs, setHalfHours, setHalfMins, setHalfSecs, setMaraHours, setMaraMins, setMaraSecs)
   }
 
   const mmsOnChange = ({ currentTarget: { value } }) => {
     setMms(value)
-    cmms(
-      value,
-      mmm,
-      setMph,
-      setKph,
-      setMps,
-      setMkm,
-      setMks,
-      setFiveHours,
-      setFiveMins,
-      setFiveSecs,
-      setTenHours,
-      setTenMins,
-      setTenSecs,
-      setHalfHours,
-      setHalfMins,
-      setHalfSecs,
-      setMaraHours,
-      setMaraMins,
-      setMaraSecs
-    )
+    cmms(value, mmm, setMph, setKph, setMps, setMkm, setMks, setFiveHours, setFiveMins, setFiveSecs, setTenHours, setTenMins, setTenSecs, setHalfHours, setHalfMins, setHalfSecs, setMaraHours, setMaraMins, setMaraSecs)
   }
 
   const mkmOnChange = ({ currentTarget: { value } }) => {
     setMkm(value)
-    cmkm(
-      value,
-      mks,
-      setMph,
-      setKph,
-      setMps,
-      setMmm,
-      setMms,
-      setFiveHours,
-      setFiveMins,
-      setFiveSecs,
-      setTenHours,
-      setTenMins,
-      setTenSecs,
-      setHalfHours,
-      setHalfMins,
-      setHalfSecs,
-      setMaraHours,
-      setMaraMins,
-      setMaraSecs
-    )
+    cmkm(value, mks, setMph, setKph, setMps, setMmm, setMms, setFiveHours, setFiveMins, setFiveSecs, setTenHours, setTenMins, setTenSecs, setHalfHours, setHalfMins, setHalfSecs, setMaraHours, setMaraMins, setMaraSecs)
   }
 
   const mksOnChange = ({ currentTarget: { value } }) => {
     setMks(value)
-    cmks(
-      value,
-      mkm,
-      setMph,
-      setKph,
-      setMps,
-      setMmm,
-      setMms,
-      setFiveHours,
-      setFiveMins,
-      setFiveSecs,
-      setTenHours,
-      setTenMins,
-      setTenSecs,
-      setHalfHours,
-      setHalfMins,
-      setHalfSecs,
-      setMaraHours,
-      setMaraMins,
-      setMaraSecs
-    )
+    cmks(value, mkm, setMph, setKph, setMps, setMmm, setMms, setFiveHours, setFiveMins, setFiveSecs, setTenHours, setTenMins, setTenSecs, setHalfHours, setHalfMins, setHalfSecs, setMaraHours, setMaraMins, setMaraSecs)
   }
 
   const fiveHoursOnChange = ({ currentTarget: { value } }) => {
     setFiveHours(value)
+    cfiveKmHours(value, fiveMins, fiveSecs, setMph, setKph, setMps, setMmm, setMms, setMkm, setMks, setTenHours, setTenMins, setTenSecs, setHalfHours, setHalfMins, setHalfSecs, setMaraHours, setMaraMins, setMaraSecs)
   }
 
   const fiveMinsOnChange = ({ currentTarget: { value } }) => {
     setFiveMins(value)
+    cfiveKmMins(fiveHours, value, fiveSecs, setMph, setKph, setMps, setMmm, setMms, setMkm, setMks, setTenHours, setTenMins, setTenSecs, setHalfHours, setHalfMins, setHalfSecs, setMaraHours, setMaraMins, setMaraSecs)
   }
 
   const fiveSecsOnChange = ({ currentTarget: { value } }) => {
     setFiveSecs(value)
+    cfiveKmSecs(fiveHours, fiveMins, value, setMph, setKph, setMps, setMmm, setMms, setMkm, setMks, setTenHours, setTenMins, setTenSecs, setHalfHours, setHalfMins, setHalfSecs, setMaraHours, setMaraMins, setMaraSecs)
   }
 
   const tenHoursOnChange = ({ currentTarget: { value } }) => {
     setTenHours(value)
+    ctenKmHours(value, tenMins, tenSecs, setMph, setKph, setMps, setMmm, setMms, setMkm, setMks, setFiveHours, setFiveMins, setFiveSecs, setHalfHours, setHalfMins, setHalfSecs, setMaraHours, setMaraMins, setMaraSecs)
   }
 
   const tenMinsOnChange = ({ currentTarget: { value } }) => {
     setTenMins(value)
+    ctenKmMins(tenHours, value, tenSecs, setMph, setKph, setMps, setMmm, setMms, setMkm, setMks, setFiveHours, setFiveMins, setFiveSecs, setHalfHours, setHalfMins, setHalfSecs, setMaraHours, setMaraMins, setMaraSecs)
   }
 
   const tenSecsOnChange = ({ currentTarget: { value } }) => {
     setTenSecs(value)
+    ctenKmSecs(tenHours, tenMins, value, setMph, setKph, setMps, setMmm, setMms, setMkm, setMks, setFiveHours, setFiveMins, setFiveSecs, setHalfHours, setHalfMins, setHalfSecs, setMaraHours, setMaraMins, setMaraSecs)
   }
 
   const halfHoursOnChange = ({ currentTarget: { value } }) => {
     setHalfHours(value)
+    chalfHours(value, halfMins, halfSecs, setMph, setKph, setMps, setMmm, setMms, setMkm, setMks, setFiveHours, setFiveMins, setFiveSecs, setTenHours, setTenMins, setTenSecs, setMaraHours, setMaraMins, setMaraSecs)
   }
 
   const halfMinsOnChange = ({ currentTarget: { value } }) => {
     setHalfMins(value)
+    chalfMins(halfHours, value, halfSecs, setMph, setKph, setMps, setMmm, setMms, setMkm, setMks, setFiveHours, setFiveMins, setFiveSecs, setTenHours, setTenMins, setTenSecs, setMaraHours, setMaraMins, setMaraSecs)
   }
 
   const halfSecsOnChange = ({ currentTarget: { value } }) => {
     setHalfSecs(value)
+    chalfSecs(halfHours, halfMins, value, setMph, setKph, setMps, setMmm, setMms, setMkm, setMks, setFiveHours, setFiveMins, setFiveSecs, setTenHours, setTenMins, setTenSecs, setMaraHours, setMaraMins, setMaraSecs)
   }
 
   const maraHoursOnChange = ({ currentTarget: { value } }) => {
     setMaraHours(value)
+    cMaraHours(value, maraMins, maraSecs, setMph, setKph, setMps, setMmm, setMms, setMkm, setMks, setFiveHours, setFiveMins, setFiveSecs, setTenHours, setTenMins, setTenSecs, setHalfHours, setHalfMins, setHalfSecs)
   }
 
   const maraMinsOnChange = ({ currentTarget: { value } }) => {
     setMaraMins(value)
+    cMaraMins(maraHours, value, maraSecs, setMph, setKph, setMps, setMmm, setMms, setMkm, setMks, setFiveHours, setFiveMins, setFiveSecs, setTenHours, setTenMins, setTenSecs, setHalfHours, setHalfMins, setHalfSecs)
   }
 
   const maraSecsOnChange = ({ currentTarget: { value } }) => {
     setMaraSecs(value)
+    cMaraSecs(maraHours, maraMins, value, setMph, setKph, setMps, setMmm, setMms, setMkm, setMks, setFiveHours, setFiveMins, setFiveSecs, setTenHours, setTenMins, setTenSecs, setHalfHours, setHalfMins, setHalfSecs)
   }
 
   return (
