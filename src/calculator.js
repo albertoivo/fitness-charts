@@ -1,3 +1,115 @@
+import { FIVE_K_DISTANCE, HALF_MARATHON_DISTANCE, MARATHON_DISTANCE, METERS_PER_MILE, MILES_PER_KM, TEN_K_DISTANCE } from "./constants";
+
+// Function to round numbers to two decimal places
+function round(num) {
+  return Math.round((num + Number.EPSILON) * 100) / 100;
+}
+
+// Speed Conversion Functions
+function mphToKph(mph) {
+  return round(mph * MILES_PER_KM);
+}
+
+function mphToMps(mph) {
+  return round(mph / METERS_PER_MILE);
+}
+
+function kphToMph(kph) {
+  return round(kph / MILES_PER_KM);
+}
+
+function mpsToMph(mps) {
+  return round(mps * METERS_PER_MILE);
+}
+
+// Pace Conversion Functions
+function mphToMinsPerMile(mph, setMmm, setMms) {
+  if (mph > 0) {
+    const minsPerMile = 60 / mph;
+    const minutes = Math.floor(minsPerMile);
+    const seconds = Math.round((minsPerMile % 1) * 60);
+    setMmm(minutes);
+    setMms(seconds);
+  } else {
+    setMmm('');
+    setMms('');
+  }
+}
+
+function kphToMinsPerKm(kph, setMkm, setMks) {
+  if (kph > 0) {
+    const minsPerKm = 60 / kph;
+    const minutes = Math.floor(minsPerKm);
+    const seconds = Math.round((minsPerKm % 1) * 60);
+    setMkm(minutes);
+    setMks(seconds);
+  } else {
+    setMkm('');
+    setMks('');
+  }
+}
+
+// Time Calculation Functions
+function kphToRaceTime(kph, distance, setHours, setMins, setSecs) {
+  if (kph > 0) {
+    const timeInHours = distance / kph;
+    const totalMinutes = timeInHours * 60;
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = Math.floor(totalMinutes % 60);
+    const seconds = Math.round((totalMinutes - Math.floor(totalMinutes)) * 60);
+
+    setHours(hours);
+    setMins(minutes);
+    setSecs(seconds);
+  } else {
+    setHours('');
+    setMins('');
+    setSecs('');
+  }
+}
+
+function kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs) {
+  kphToRaceTime(kph, FIVE_K_DISTANCE, setFiveHours, setFiveMins, setFiveSecs);
+}
+
+function kphToTenKm(kph, setTenHours, setTenMins, setTenSecs) {
+  kphToRaceTime(kph, TEN_K_DISTANCE, setTenHours, setTenMins, setTenSecs);
+}
+
+function kphToHalf(kph, setHalfHours, setHalfMins, setHalfSecs) {
+  kphToRaceTime(kph, HALF_MARATHON_DISTANCE, setHalfHours, setHalfMins, setHalfSecs);
+}
+
+function kphToMarathon(kph, setMaraHours, setMaraMins, setMaraSecs) {
+  kphToRaceTime(kph, MARATHON_DISTANCE, setMaraHours, setMaraMins, setMaraSecs);
+}
+
+// Speed Calculation from Time Functions
+function timeToKph(hours, mins, secs, distance) {
+  const totalTimeInHours = Number(hours) + (Number(mins) / 60) + (Number(secs) / 3600);
+  if (totalTimeInHours > 0) {
+    return round(distance / totalTimeInHours);
+  } else {
+    return 0;
+  }
+}
+
+function fiveKMtoKPH(fiveHours, fiveMins, fiveSecs) {
+  return timeToKph(fiveHours, fiveMins, fiveSecs, FIVE_K_DISTANCE);
+}
+
+function tenKMtoKPH(tenHours, tenMins, tenSecs) {
+  return timeToKph(tenHours, tenMins, tenSecs, TEN_K_DISTANCE);
+}
+
+function halfMarathonKMtoKPH(halfHours, halfMins, halfSecs) {
+  return timeToKph(halfHours, halfMins, halfSecs, HALF_MARATHON_DISTANCE);
+}
+
+function marathonKMtoKPH(maraHours, maraMins, maraSecs) {
+  return timeToKph(maraHours, maraMins, maraSecs, MARATHON_DISTANCE);
+}
+
 export function cmph(
   mph,
   setKph, setMps, setMmm, setMms, setMkm, setMks,
@@ -6,9 +118,9 @@ export function cmph(
   setHalfHours, setHalfMins, setHalfSecs,
   setMaraHours, setMaraMins, setMaraSecs
 ) {
-  const kph = MPHtoKPH(mph)
+  const kph = mphToKph(mph)
   setKph(kph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToMinsPerKm(kph, setMkm, setMks)
   kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs)
@@ -25,9 +137,9 @@ export function ckph(
   setHalfHours, setHalfMins, setHalfSecs,
   setMaraHours, setMaraMins, setMaraSecs
 ) {
-  const mph = KPHtoMPH(kph)
+  const mph = kphToMph(kph)
   setMph(mph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToMinsPerKm(kph, setMkm, setMks)
   kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs)
@@ -44,9 +156,9 @@ export function cmps(
   setHalfHours, setHalfMins, setHalfSecs,
   setMaraHours, setMaraMins, setMaraSecs
 ) {
-  const mph = MPStoMPH(mps)
+  const mph = mpsToMph(mps)
   setMph(mph)
-  const kph = MPHtoKPH(mph)
+  const kph = mphToKph(mph)
   setKph(kph)
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToMinsPerKm(kph, setMkm, setMks)
@@ -67,10 +179,10 @@ export function cmmm(
   if (!mmm) mmm = 0
   if (!mms) mms = 0
   const mph = 60 / ((mmm * 60 + Number(mms)) / 60)
-  setMph(Math.round((mph + Number.EPSILON) * 100) / 100)
-  const kph = MPHtoKPH(mph)
+  setMph(round(mph))
+  const kph = mphToKph(mph)
   setKph(kph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   kphToMinsPerKm(kph, setMkm, setMks)
   kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs)
   kphToTenKm(kph, setTenHours, setTenMins, setTenSecs)
@@ -89,10 +201,10 @@ export function cmms(
   if (!mms) mms = 0
   if (!mmm) mmm = 0
   const mph = 60 / ((mmm * 60 + Number(mms)) / 60)
-  setMph(Math.round((mph + Number.EPSILON) * 100) / 100)
-  const kph = MPHtoKPH(mph)
+  setMph(round(mph))
+  const kph = mphToKph(mph)
   setKph(kph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   kphToMinsPerKm(kph, setMkm, setMks)
   kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs)
   kphToTenKm(kph, setTenHours, setTenMins, setTenSecs)
@@ -111,10 +223,10 @@ export function cmkm(
   if (!mkm) mkm = 0
   if (!mks) mks = 0
   const kph = 60 / ((mkm * 60 + Number(mks)) / 60)
-  setKph(Math.round((kph + Number.EPSILON) * 100) / 100)
-  const mph = KPHtoMPH(kph)
+  setKph(round(kph))
+  const mph = kphToMph(kph)
   setMph(mph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs)
   kphToTenKm(kph, setTenHours, setTenMins, setTenSecs)
@@ -133,10 +245,10 @@ export function cmks(
   if (!mks) mks = 0
   if (!mkm) mkm = 0
   const kph = 60 / ((mkm * 60 + Number(mks)) / 60)
-  setKph(Math.round((kph + Number.EPSILON) * 100) / 100)
-  const mph = KPHtoMPH(kph)
+  setKph(round(kph))
+  const mph = kphToMph(kph)
   setMph(mph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs)
   kphToTenKm(kph, setTenHours, setTenMins, setTenSecs)
@@ -155,9 +267,9 @@ export function cfiveKmHours(
   if (!fiveSecs) fiveSecs = 0
   const kph = fiveKMtoKPH(fiveHours, fiveMins, fiveSecs, setKph)
   setKph(kph)
-  const mph = KPHtoMPH(kph)
+  const mph = kphToMph(kph)
   setMph(mph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToMinsPerKm(kph, setMkm, setMks)
   kphToTenKm(kph, setTenHours, setTenMins, setTenSecs)
@@ -177,9 +289,9 @@ export function cfiveKmMins(
   const kph = fiveKMtoKPH(fiveHours, fiveMins, fiveSecs, setKph)
   // console.log('params', fiveHours, fiveMins, fiveSecs)
   setKph(kph)
-  const mph = KPHtoMPH(kph)
+  const mph = kphToMph(kph)
   setMph(mph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToMinsPerKm(kph, setMkm, setMks)
   kphToTenKm(kph, setTenHours, setTenMins, setTenSecs)
@@ -198,9 +310,9 @@ export function cfiveKmSecs(
   if (!fiveMins) fiveMins = 0
   const kph = fiveKMtoKPH(fiveHours, fiveMins, fiveSecs, setKph)
   setKph(kph)
-  const mph = KPHtoMPH(kph)
+  const mph = kphToMph(kph)
   setMph(mph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToMinsPerKm(kph, setMkm, setMks)
   kphToTenKm(kph, setTenHours, setTenMins, setTenSecs)
@@ -219,9 +331,9 @@ export function ctenKmHours(
   if (!tenSecs) tenSecs = 0
   const kph = tenKMtoKPH(tenHours, tenMins, tenSecs, setKph)
   setKph(kph)
-  const mph = KPHtoMPH(kph)
+  const mph = kphToMph(kph)
   setMph(mph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToMinsPerKm(kph, setMkm, setMks)
   kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs)
@@ -241,9 +353,9 @@ export function ctenKmMins(
   const kph = tenKMtoKPH(tenHours, tenMins, tenSecs, setKph)
   // console.log('params', fiveHours, fiveMins, fiveSecs)
   setKph(kph)
-  const mph = KPHtoMPH(kph)
+  const mph = kphToMph(kph)
   setMph(mph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToMinsPerKm(kph, setMkm, setMks)
   kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs)
@@ -262,9 +374,9 @@ export function ctenKmSecs(
   if (!tenMins) tenMins = 0
   const kph = tenKMtoKPH(tenHours, tenMins, tenSecs, setKph)
   setKph(kph)
-  const mph = KPHtoMPH(kph)
+  const mph = kphToMph(kph)
   setMph(mph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToMinsPerKm(kph, setMkm, setMks)
   kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs)
@@ -281,11 +393,11 @@ export function chalfHours(
 ) {
   if (!halfMins) halfMins = 0
   if (!halfSecs) halfSecs = 0
-  const kph = halfKMtoKPH(halfHours, halfMins, halfSecs, setKph)
+  const kph = halfMarathonKMtoKPH(halfHours, halfMins, halfSecs, setKph)
   setKph(kph)
-  const mph = KPHtoMPH(kph)
+  const mph = kphToMph(kph)
   setMph(mph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToMinsPerKm(kph, setMkm, setMks)
   kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs)
@@ -302,12 +414,12 @@ export function chalfMins(
 ) {
   if (!halfHours) halfHours = 0
   if (!halfSecs) halfSecs = 0
-  const kph = halfKMtoKPH(halfHours, halfMins, halfSecs, setKph)
+  const kph = halfMarathonKMtoKPH(halfHours, halfMins, halfSecs, setKph)
   // console.log('params', fiveHours, fiveMins, fiveSecs)
   setKph(kph)
-  const mph = KPHtoMPH(kph)
+  const mph = kphToMph(kph)
   setMph(mph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToMinsPerKm(kph, setMkm, setMks)
   kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs)
@@ -324,11 +436,11 @@ export function chalfSecs(
 ) {
   if (!halfHours) halfHours = 0
   if (!halfMins) halfMins = 0
-  const kph = halfKMtoKPH(halfHours, halfMins, halfSecs, setKph)
+  const kph = halfMarathonKMtoKPH(halfHours, halfMins, halfSecs, setKph)
   setKph(kph)
-  const mph = KPHtoMPH(kph)
+  const mph = kphToMph(kph)
   setMph(mph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToMinsPerKm(kph, setMkm, setMks)
   kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs)
@@ -345,11 +457,11 @@ export function cMaraHours(
 ) {
   if (!maraMins) maraMins = 0
   if (!maraSecs) maraSecs = 0
-  const kph = maraKMtoKPH(maraHours, maraMins, maraSecs, setKph)
+  const kph = marathonKMtoKPH(maraHours, maraMins, maraSecs, setKph)
   setKph(kph)
-  const mph = KPHtoMPH(kph)
+  const mph = kphToMph(kph)
   setMph(mph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToMinsPerKm(kph, setMkm, setMks)
   kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs)
@@ -366,12 +478,12 @@ export function cMaraMins(
 ) {
   if (!maraHours) maraHours = 0
   if (!maraSecs) maraSecs = 0
-  const kph = maraKMtoKPH(maraHours, maraMins, maraSecs, setKph)
+  const kph = marathonKMtoKPH(maraHours, maraMins, maraSecs, setKph)
   // console.log('params', fiveHours, fiveMins, fiveSecs)
   setKph(kph)
-  const mph = KPHtoMPH(kph)
+  const mph = kphToMph(kph)
   setMph(mph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToMinsPerKm(kph, setMkm, setMks)
   kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs)
@@ -388,180 +500,14 @@ export function cMaraSecs(
 ) {
   if (!maraHours) maraHours = 0
   if (!maraMins) maraMins = 0
-  const kph = maraKMtoKPH(maraHours, maraMins, maraSecs, setKph)
+  const kph = marathonKMtoKPH(maraHours, maraMins, maraSecs, setKph)
   setKph(kph)
-  const mph = KPHtoMPH(kph)
+  const mph = kphToMph(kph)
   setMph(mph)
-  setMps(MPHtoMPS(mph))
+  setMps(mphToMps(mph))
   mphToMinsPerMile(mph, setMmm, setMms)
   kphToMinsPerKm(kph, setMkm, setMks)
   kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs)
   kphToTenKm(kph, setTenHours, setTenMins, setTenSecs,)
   kphToHalf(kph, setHalfHours, setHalfMins, setHalfSecs)
-}
-
-/////////////
-// Helpers //
-/////////////
-
-function MPHtoKPH(mph) {
-  const kph = mph * 1.60934
-  return Math.round((kph + Number.EPSILON) * 100) / 100
-}
-
-function MPHtoMPS(mph) {
-  const mps = mph / 2.237
-  return Math.round((mps + Number.EPSILON) * 100) / 100
-}
-
-function KPHtoMPH(kph) {
-  const mph = kph / 1.60934
-  return Math.round((mph + Number.EPSILON) * 100) / 100
-}
-
-function MPStoMPH(mps) {
-  const mph = mps * 2.237
-  return Math.round((mph + Number.EPSILON) * 100) / 100
-}
-
-function mphToMinsPerMile(mph, setMmm, setMms) {
-  if (mph && mph > 0) {
-    const sixtyDividedByMPH = 60 / mph
-    const mmm = Math.floor(sixtyDividedByMPH)
-    const mms = Math.round((sixtyDividedByMPH % 1) * 60)
-    setMmm(Math.round((mmm + Number.EPSILON) * 100) / 100)
-    setMms(Math.round((mms + Number.EPSILON) * 100) / 100)
-  } else {
-    setMmm('')
-    setMms('')
-  }
-}
-
-function kphToMinsPerKm(kph, setMkm, setMks) {
-  if (kph && kph > 0) {
-    const sixtyDividedByMPH = 60 / kph
-    const mkm = Math.floor(sixtyDividedByMPH)
-    const mks = Math.round((sixtyDividedByMPH % 1) * 60)
-    setMkm(Math.round((mkm + Number.EPSILON) * 100) / 100)
-    setMks(Math.round((mks + Number.EPSILON) * 100) / 100)
-  } else {
-    setMkm('')
-    setMks('')
-  }
-}
-
-function kphToFiveKm(kph, setFiveHours, setFiveMins, setFiveSecs) {
-  if (kph && kph > 0) {
-    const time = 5 / kph
-    const minTotal = time * 60
-    const hours = minTotal / 60
-    const min = minTotal % 60
-
-    const rounded = Math.floor(min)
-    const decimal = min - rounded
-    const sec = decimal * 60
-
-    setFiveHours(Number.parseInt(hours))
-    setFiveMins(Number.parseInt(min))
-    setFiveSecs(Number.parseInt(sec))
-  } else {
-    setFiveHours('')
-    setFiveMins('')
-    setFiveSecs('')
-  }
-}
-
-function kphToTenKm(kph, setTenHours, setTenMins, setTenSecs) {
-  if (kph && kph > 0) {
-    const time = 10 / kph
-    const minTotal = time * 60
-    const hours = minTotal / 60
-    const min = minTotal % 60
-
-    const rounded = Math.floor(min)
-    const decimal = min - rounded
-    const sec = decimal * 60
-
-    setTenHours(Number.parseInt(hours))
-    setTenMins(Number.parseInt(min))
-    setTenSecs(Number.parseInt(sec))
-  } else {
-    setTenHours('')
-    setTenMins('')
-    setTenSecs('')
-  }
-}
-
-function kphToHalf(kph, setHalfHours, setHalfMins, setHalfSecs) {
-  if (kph && kph > 0) {
-    const time = 21.097 / kph
-    const minTotal = time * 60
-    const hours = minTotal / 60
-    const min = minTotal % 60
-
-    const rounded = Math.floor(min)
-    const decimal = min - rounded
-    const sec = decimal * 60
-
-    setHalfHours(Number.parseInt(hours))
-    setHalfMins(Number.parseInt(min))
-    setHalfSecs(Number.parseInt(sec))
-  } else {
-    setHalfHours('')
-    setHalfMins('')
-    setHalfSecs('')
-  }
-}
-
-function kphToMarathon(kph, setMaraHours, setMaraMins, setMaraSecs) {
-  if (kph && kph > 0) {
-    const time = 42.195 / kph
-    const minTotal = time * 60
-    const hours = minTotal / 60
-    const min = minTotal % 60
-
-    const rounded = Math.floor(min)
-    const decimal = min - rounded
-    const sec = decimal * 60
-
-    setMaraHours(Number.parseInt(hours))
-    setMaraMins(Number.parseInt(min))
-    setMaraSecs(Number.parseInt(sec))
-  } else {
-    setMaraHours('')
-    setMaraMins('')
-    setMaraSecs('')
-  }
-}
-
-function fiveKMtoKPH(fiveHours, fiveMins, fiveSecs) {
-  const minToHour = fiveMins / 60
-  const secsToHour = fiveSecs / 3600
-  const totalTimeHour = Number.parseInt(fiveHours) + Number.parseFloat(minToHour) + Number.parseFloat(secsToHour)
-  const kph = 5 / totalTimeHour
-  return Math.round((kph + Number.EPSILON) * 100) / 100
-}
-
-function tenKMtoKPH(tenHours, tenMins, tenSecs) {
-  const minToHour = tenMins / 60
-  const secsToHour = tenSecs / 3600
-  const totalTimeHour = Number.parseInt(tenHours) + Number.parseFloat(minToHour) + Number.parseFloat(secsToHour)
-  const kph = 10 / totalTimeHour
-  return Math.round((kph + Number.EPSILON) * 100) / 100
-}
-
-function halfKMtoKPH(halfHours, halfMins, halfSecs) {
-  const minToHour = halfMins / 60
-  const secsToHour = halfSecs / 3600
-  const totalTimeHour = Number.parseInt(halfHours) + Number.parseFloat(minToHour) + Number.parseFloat(secsToHour)
-  const kph = 21.097 / totalTimeHour
-  return Math.round((kph + Number.EPSILON) * 100) / 100
-}
-
-function maraKMtoKPH(maraHours, maraMins, maraSecs) {
-  const minToHour = maraMins / 60
-  const secsToHour = maraSecs / 3600
-  const totalTimeHour = Number.parseInt(maraHours) + Number.parseFloat(minToHour) + Number.parseFloat(secsToHour)
-  const kph = 42.195 / totalTimeHour
-  return Math.round((kph + Number.EPSILON) * 100) / 100
 }
